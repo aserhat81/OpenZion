@@ -1,5 +1,9 @@
 # 🤖 Local Agent — AI Software Engineer for VS Code
 
+<p align="center">
+  <img src="logo.png" alt="Local Agent Logo" width="128">
+</p>
+
 An autonomous AI coding agent that lives inside VS Code and uses your local LLM (via Ollama) to write code, create files, run commands, and complete full development tasks — all without sending your code to the cloud.
 
 ---

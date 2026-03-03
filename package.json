@@ -5,6 +5,10 @@
   "version": "0.1.0",
   "publisher": "YourName",
   "icon": "logo.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aserhat81/OpenZion.git"
+  },
   "engines": {
     "vscode": "^1.85.0"
   },
