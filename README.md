@@ -42,7 +42,7 @@ GitHub → Code → Download ZIP → Extract
 - A supported model pulled via Ollama:
 
 ```bash
-ollama pull qwen2.5-coder:7b    # recommended for coding
+ollama pull qwen3.5:9b    # recommended for coding
 ollama pull llama3              # general purpose
 ollama pull deepseek-coder:6.7b # alternative
 ```
