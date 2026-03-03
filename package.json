@@ -4,6 +4,7 @@
   "description": "Fully autonomous AI software engineer directly within your editor",
   "version": "0.1.0",
   "publisher": "YourName",
+  "icon": "logo.png",
   "engines": {
     "vscode": "^1.85.0"
   },
