@@ -1,0 +1,79 @@
+{
+  "name": "local-agent",
+  "displayName": "Local Agent",
+  "description": "Fully autonomous AI software engineer directly within your editor",
+  "version": "0.1.0",
+  "publisher": "YourName",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Machine Learning",
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "local-agent-sidebar",
+          "title": "Local Agent",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "local-agent-sidebar": [
+        {
+          "type": "webview",
+          "id": "localAgent.chatView",
+          "name": "Chat"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Local Agent",
+      "properties": {
+        "localAgent.apiBaseUrl": {
+          "type": "string",
+          "default": "http://127.0.0.1:11434/v1",
+          "description": "The base URL for the OpenAI-compatible local API (e.g. Ollama, LM Studio)"
+        },
+        "localAgent.modelName": {
+          "type": "string",
+          "default": "llama3",
+          "description": "The name of the local model to use"
+        },
+        "localAgent.autonomyMode": {
+          "type": "boolean",
+          "default": false,
+          "description": "If true, the agent runs fully autonomously. If false, it asks for permission before running commands or modifying files."
+        },
+        "localAgent.streamResponse": {
+          "type": "boolean",
+          "default": false,
+          "description": "If true, the LLM response will be streamed live to the chat."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "tsc -p ./",
+    "watch": "tsc -w -p ./",
+    "package": "esbuild src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node",
+    "build": "npm run package"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.85.0",
+    "esbuild": "^0.20.0",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@types/node-fetch": "^2.6.13",
+    "cheerio": "^1.0.0-rc.12",
+    "node-fetch": "^2.7.0"
+  }
+}
