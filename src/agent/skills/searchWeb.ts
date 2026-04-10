@@ -1,5 +1,25 @@
+import * as vscode from 'vscode';
+
 export async function searchWeb(query: string): Promise<string> {
     try {
+        const config = vscode.workspace.getConfiguration('localAgent');
+        const tavilyApiKey = config.get<string>('tavilyApiKey');
+
+        if (tavilyApiKey) {
+            const { tavily } = require('@tavily/core');
+            const client = tavily({ apiKey: tavilyApiKey });
+            const response = await client.search(query, { maxResults: 5 });
+
+            const results: string[] = [];
+            for (const result of response.results) {
+                results.push(`[Title]: ${result.title}\n[URL]: ${result.url}\n[Snippet]: ${result.content}\n`);
+            }
+
+            if (results.length === 0) return 'No results found.';
+            return results.join('\n');
+        }
+
+        // Fallback: DuckDuckGo HTML scraping
         const res = await fetch(`https://html.duckduckgo.com/html/?q=${encodeURIComponent(query)}`);
         const text = await res.text();
 
