@@ -2,11 +2,12 @@ import * as vscode from 'vscode';
 import { readFile } from './readFile';
 import { editFile } from './editFile';
 import { runTerminalCommand } from './runTerminalCommand';
-import { searchWeb } from './searchWeb';
-import { fetchUrl } from './fetchUrl';
+import { executeWebTool } from './webTools';
 
 export interface ToolContext {
     cwd: string;
+    signal?: AbortSignal;
+    sessionId?: string;
 }
 
 export const tools = [
@@ -89,8 +90,8 @@ export async function executeTool(name: string, args: any, context: ToolContext)
             case 'readFile': return await readFile(args.filePath, context);
             case 'editFile': return await editFile(args.filePath, args.content, context);
             case 'runTerminalCommand': return await runTerminalCommand(args.command, context);
-            case 'searchWeb': return await searchWeb(args.query);
-            case 'fetchUrl': return await fetchUrl(args.url);
+            case 'searchWeb':
+            case 'fetchUrl': return await executeWebTool(name, args, context);
             default: return `Error: Tool ${name} not found.`;
         }
     } catch (e: any) {

@@ -1,6 +1,6 @@
-export async function fetchUrl(url: string): Promise<string> {
+export async function fetchUrl(url: string, signal?: AbortSignal): Promise<string> {
     try {
-        const res = await fetch(url);
+        const res = await fetch(url, { signal });
         const text = await res.text();
 
         const cheerio = require('cheerio');

@@ -59,6 +59,17 @@
           "type": "boolean",
           "default": false,
           "description": "If true, the LLM response will be streamed live to the chat."
+        },
+        "localAgent.webSearchProvider": {
+          "type": "string",
+          "enum": [
+            "duckduckgo",
+            "parallel",
+            "disabled"
+          ],
+          "default": "duckduckgo",
+          "scope": "resource",
+          "description": "Provider for searchWeb and fetchUrl. DuckDuckGo uses direct page fetching; Parallel uses anonymous Search MCP; disabled blocks both web tools."
         }
       }
     }
@@ -68,7 +79,8 @@
     "compile": "tsc -p ./",
     "watch": "tsc -w -p ./",
     "package": "esbuild src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node",
-    "build": "npm run package"
+    "build": "npm run package",
+    "test": "npm run compile && node --test test/*.test.cjs"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
@@ -77,6 +89,7 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.1",
     "@types/node-fetch": "^2.6.13",
     "cheerio": "^1.0.0-rc.12",
     "node-fetch": "^2.7.0"

@@ -1,6 +1,6 @@
-export async function searchWeb(query: string): Promise<string> {
+export async function searchWeb(query: string, signal?: AbortSignal): Promise<string> {
     try {
-        const res = await fetch(`https://html.duckduckgo.com/html/?q=${encodeURIComponent(query)}`);
+        const res = await fetch(`https://html.duckduckgo.com/html/?q=${encodeURIComponent(query)}`, { signal });
         const text = await res.text();
 
         const cheerio = require('cheerio');

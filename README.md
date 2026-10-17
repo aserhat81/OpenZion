@@ -59,6 +59,7 @@ Open VS Code Settings (`Ctrl+,`) and search for **Local Agent**:
 | `localAgent.modelName` | `llama3` | Model name to use |
 | `localAgent.autonomyMode` | `false` | `true` = run tools without asking permission |
 | `localAgent.streamResponse` | `false` | `true` = stream LLM responses in real-time |
+| `localAgent.webSearchProvider` | `duckduckgo` | `duckduckgo`, `parallel`, or `disabled` for both web tools |
 
 ### Recommended Settings (settings.json)
 
@@ -70,6 +71,33 @@ Open VS Code Settings (`Ctrl+,`) and search for **Local Agent**:
   "localAgent.streamResponse": true
 }
 ```
+
+---
+
+## Web search provider
+
+`searchWeb` uses DuckDuckGo and `fetchUrl` fetches pages directly by default.
+To use free web search and page extraction through
+[Parallel Search MCP](https://docs.parallel.ai/integrations/mcp/search-mcp), set:
+
+```json
+{
+  "localAgent.webSearchProvider": "parallel"
+}
+```
+
+No account or API key is needed. Anonymous search uses Fast mode. Search queries
+and requested URLs are sent to Parallel; local model inference stays on your
+configured endpoint. Parallel returns source links and readable page excerpts.
+Parallel requests have a 30-second deadline and Stop cancels an active web request.
+Service errors, including free-tier limits, are returned to the agent without
+switching providers. Select `duckduckgo` to restore direct fetching, or `disabled`
+to block both web tools. Settings can be set per workspace and are read on each
+web tool call. The existing autonomy permission rules still apply.
+
+Build from source using `npm ci` and the rebuild/reinstall command under
+**Adding New Tools** below; the checked-in VSIX does not contain this change.
+Run `npm test` for the scripted agent-loop and MCP transport tests.
 
 ---
 

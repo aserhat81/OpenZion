@@ -3,6 +3,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import * as http from 'http';
 import * as https from 'https';
+import { randomUUID } from 'crypto';
 import { executeTool, tools } from './skills';
 
 export class Agent {
@@ -11,6 +12,8 @@ export class Agent {
     private pendingActionResolvers: Map<string, (allowed: boolean) => void> = new Map();
     private actionCounter = 0;
     private stopped = false;
+    private webController?: AbortController;
+    private readonly sessionId = randomUUID();
 
     constructor(view: vscode.WebviewView) {
         this.view = view;
@@ -23,6 +26,7 @@ export class Agent {
 
     public stop() {
         this.stopped = true;
+        this.webController?.abort();
         for (const [, resolver] of this.pendingActionResolvers) {
             resolver(false);
         }
@@ -272,6 +276,7 @@ Tool workflow for "create a game/app/script":
 
     public async processUserMessage(message: string) {
         this.stopped = false;
+        this.webController = new AbortController();
         this.refreshSystemContext();   // ← re-read rules & skills every time
         this.messages.push({ role: 'user', content: message });
         this.view.webview.postMessage({ type: 'setBusy' });
@@ -339,7 +344,9 @@ Tool workflow for "create a game/app/script":
                             const root = vscode.workspace.workspaceFolders
                                 ? vscode.workspace.workspaceFolders[0].uri.fsPath
                                 : process.cwd();
-                            toolResult = await executeTool(toolName, args, { cwd: root });
+                            toolResult = await executeTool(toolName, args, {
+                                cwd: root, signal: this.webController?.signal, sessionId: this.sessionId
+                            });
                         } else {
                             toolResult = 'User rejected the action.';
                         }
